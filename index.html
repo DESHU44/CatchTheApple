@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Catch The Apple</title>
+
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<div id="gameArea">
+		<canvas id="gameCanvas" width="480" height="320">&nsub;</canvas>
+		
+  		<div id="statsPanel">
+  			<p class="score">
+                <label>Score: <span id="score">&nbsp;</span></label>
+                <label class="pull-right">Miss: <span id="miss">&nbsp;</span></label>
+            </p>
+  		</div>
+
+		<p class="gameOver hidden" id="gameOver">Game Over</p>
+        <input type="image" src="images/start.png" value="test" id="startBtn" height="50"/>
+
+        <audio src="sound/tkr.wav" id="startC">&nbsp;</audio>
+        <img src="images/loading45.gif" id="image" height="50" width="61" class="loader">
+	</div>
+
+	<script src="js/main.js"></script>
+</body>
+</html>

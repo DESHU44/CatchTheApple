@@ -1,0 +1,14 @@
+{
+  "name": "Catch The Apple",
+  "description": "This is the Game to catch Apple and score the point",
+  "version": "0.0.0.1",
+  "manifest_version": 2,
+  "icons": {
+    "128": "images/icon.png"
+  },
+  "app": {
+    "background": {
+		"scripts": ["js/temp.js"]
+	}
+  }
+}  

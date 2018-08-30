@@ -1,0 +1,279 @@
+(function($w, dom) {
+
+   	// shim layer with setTimeout fallback
+   	$w.requestAnimFrame = (function() {
+
+	      	return $w.requestAnimationFrame ||
+	         	           $w.webkitRequestAnimationFrame ||
+	         	           $w.mozRequestAnimationFrame ||
+
+	         	function(callback) {
+
+			$w.setTimeout(callback, 1000 / 60);
+	         	};
+   	}());
+
+
+
+	   var can = dom.getElementById('gameCanvas'),
+	      ctx = can.getContext('2d'),
+	      cwidth = can.width,
+	      cheight = can.height,
+	      _snow = [],
+	      cH = 50,
+	      cW = 40,
+         WIN = 20,
+        sound = dom.getElementById("startC");
+
+	   var cureentScreen, gamePause, miss = 0;
+
+
+	// Velocity x
+	var vx = 0;
+	// Velocity y
+
+	var gravity = 0.05;
+
+
+   var background = new Image();
+   background.src = 'images/background.png',
+      apple = new Image(),
+      apple.src = 'images/apple.png',
+      basket = new Image(),
+      basket.src = 'images/basket.png';
+
+   function Charater(x, y, w, h) {
+      this.x = x;
+      this.y = y;
+      this.w = w;
+      this.h = h;
+   }
+
+   function Apple(x, y, w, h) {
+      this.x = x;
+      this.y = y;
+      this.w = w;
+      this.h = h;
+   }
+
+   Charater.prototype.leftAndRight = function() {
+
+      ctx.drawImage(basket, this.x, this.y, this.w, this.h);
+   };
+
+   function MyObj(x, y) {
+      this.x = x;
+      this.y = y;
+      this.dy = 1;
+      this.w = 20;
+      this.h = 20;
+   }
+
+   MyObj.prototype.create = function() {
+      ctx.fillStyle = "red";
+
+      ctx.drawImage(apple, this.x, this.y, this.w, this.h);
+   };
+
+   MyObj.prototype.move = function() {
+
+      this.y += this.dy;
+      this.dy += gravity;
+
+
+      if (this.y+this.w > cheight) {
+
+      	++miss;
+
+         this.y = -10;
+         this.dy = 0.5;
+         this.x = Math.floor(Math.random() * (cwidth  - this.w));
+      }
+   };
+
+
+   var cObj = new Charater(cwidth / 2, cheight - 50, 40, 50);
+
+
+
+
+   for (var i = 0; i < 4; i++) {
+      _snow.push(new MyObj(Math.floor(Math.random() * cwidth  - 20), Math.floor(Math.random() * cheight)));
+   }
+
+   function log(msg) {
+      console.log(msg);
+   }
+
+
+   // return true if the circle is inside the rectangle
+   function checkCollitsion(test) {
+
+      return (
+         cObj.x + cObj.w >= test.x && cObj.x <= test.x + test.w && cObj.y >= test.y && cObj.y <= test.y + test.h
+      )
+   }
+
+   var count = 0,
+      para = dom.getElementById('score');
+
+
+   var splashScreen = function() {
+      cureentScreen = 1;
+   };
+
+var gameOverScreen = function () {
+
+	dom.getElementById('startBtn').classList.remove("hidden");
+	dom.getElementById('gameOver').classList.remove("hidden");
+
+};
+
+
+   var startScreean = function() {
+
+   	cureentScreen = 2;
+
+
+
+      (function draw() {
+
+         var tmp;
+
+         ctx.clearRect(0, 0, cwidth, cheight);
+
+         ctx.save();
+
+//         ctx.rotate(-.09);
+
+
+         for (var i = 0; i < _snow.length; i++) {
+
+            tmp = _snow[i];
+
+            tmp.create();
+            tmp.move();
+
+
+            //log("miss"+miss);
+
+               if(miss > WIN)
+               	gamePause = true;
+
+
+            if (checkCollitsion(tmp)) {
+
+              sound.play();
+
+         tmp.y = -10;
+         tmp.dy = 0.5;
+               tmp.x = Math.floor(Math.random() * (cwidth  - tmp.w));
+
+               ++count;
+
+
+               para.innerHTML = count;
+
+
+
+            }
+         }
+
+               	ctx.restore();
+
+
+         cObj.leftAndRight();
+
+         if(!gamePause)
+         	   requestAnimationFrame(draw);
+         else {
+                    ctx.clearRect(0, 0, cwidth, cheight);
+            para.innerHTML = count;
+
+         	gameOverScreen();
+         }
+
+
+      }());
+   };
+
+
+
+
+   function moveCharacter(e) {
+      x = e.clientX;
+      y = e.clientY;
+
+	x -= dom.getElementById("gameArea").offsetLeft;
+	  y -= can.offsetTop;
+
+
+
+      if (x >= cwidth - cObj.w) {
+         cObj.x = cwidth - cObj.w;
+      } else {
+         cObj.x = x;
+      }
+
+
+   }
+
+   function screenChange() {
+
+     sound.play();
+
+      if (cureentScreen == 1) {
+         startScreean();
+      } else if(cureentScreen == 2) {
+      		gamePause = false;
+      		miss = 0;
+
+          count = 0;
+      para.innerHTML = count;
+
+      		//gravity = 0.2;
+
+      		dom.getElementById('startBtn').classList.add("hidden");
+		dom.getElementById('gameOver').classList.add("hidden");
+
+
+      		startScreean();
+      }
+
+      this.classList.add("hidden");
+   }
+
+
+
+   function leftRight (event) {
+
+     var lR = event.gamma;
+
+     log("--"+lR);
+
+     if(lR > 0) {
+
+       cObj.x += Math.floor(lR);
+
+       if (cObj.x >= cwidth - cObj.w) {
+          cObj.x = cwidth-cObj.w;
+       }
+
+     } else {
+
+         cObj.x -= Math.floor(lR);
+
+
+      if (cObj.x < 0) {
+          cObj.x = 0;
+       }
+     }
+   }
+
+   splashScreen();
+
+   can.addEventListener("mousemove", moveCharacter, false);
+   dom.getElementById('startBtn').addEventListener("click", screenChange, false);
+ //  $w.addEventListener("deviceorientation", leftRight, false);
+
+}(window, document, undefined))

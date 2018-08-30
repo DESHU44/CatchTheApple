@@ -1,0 +1,85 @@
+html, body {
+  margin: 0;
+
+   font-family: helvetica;
+
+	-webkit-box-sizing: border-box;
+}
+
+body {
+
+ background: rgba(76,76,76,1);
+}
+
+#gameArea {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+
+	margin-top:-160px;
+	margin-left: -240px;
+
+}
+
+#gameCanvas {
+	background: url(../images/back_2.png);
+	margin: 0 auto;
+}
+
+input[type="image"] , .gameOver{
+	z-index:2;
+	position:absolute;
+  top:68%;
+	left:50%;
+
+  margin-left: -70px;
+  outline: 0;
+}
+
+.gameOver {
+	top: 35%;
+  left: 50%;
+	font-size: 22px;
+	color: #FFFFFF;
+	font-weight: bold;
+
+  margin-left: -54px;
+
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  margin-left: -25px;
+  margin-top: -25px;
+}
+
+
+.hidden {
+	display: none;
+}
+
+
+.score {
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 10px;
+  margin: 0;
+
+
+  background: rgba(147,206,222,1);
+background: -moz-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(147,206,222,1)), color-stop(41%, rgba(117,189,209,1)), color-stop(100%, rgba(73,165,191,1)));
+background: -webkit-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+background: -o-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+background: -ms-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+background: linear-gradient(to right, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93cede', endColorstr='#49a5bf', GradientType=1 );
+}
+
+
+.pull-right {
+  float: right;
+}
